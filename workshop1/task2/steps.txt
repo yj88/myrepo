@@ -1,0 +1,13 @@
+# create vol for mydb
+docker volume create myvol
+
+# create bridge network
+docker network create -d bridge mynet
+
+# deploy mydb
+docker run -d --name mydb --network mynet -v myvol:/var/lib/mysql stackupiss/northwind-db:v1 
+
+# deploy myapp
+docker run -d --name myapp --network mynet -p 8088:3000 -e DB_HOST=mydb stackupiss/northwind-app:v1
+
+# enjoy myapp @ localhost:8088
